@@ -54,6 +54,9 @@ class ServiceNotificationEvent {
   /// if the notification is ongoing (cannot be dismissed and is in progress)
   bool? onGoing;
 
+  int? timestamp;
+  String? key;
+
   ServiceNotificationEvent({
     this.id,
     this.canReply,
@@ -66,6 +69,8 @@ class ServiceNotificationEvent {
     this.largeIcon,
     this.content,
     this.onGoing,
+    this.timestamp,
+    this.key,
   });
 
   ServiceNotificationEvent.fromMap(Map<dynamic, dynamic> map) {
@@ -80,6 +85,8 @@ class ServiceNotificationEvent {
     largeIcon = map['largeIcon'];
     content = map['content'];
     onGoing = map['onGoing'];
+    timestamp = map['timestamp']; // Retrieve the timestamp
+    key = map['key'];
   }
 
   /// send a direct message reply to the incoming notification
@@ -100,6 +107,7 @@ class ServiceNotificationEvent {
   String toString() {
     return '''ServiceNotificationEvent(
       id: $id
+      key: $key
       can reply: $canReply
       packageName: $packageName
       title: $title
@@ -107,6 +115,8 @@ class ServiceNotificationEvent {
       hasRemoved: $hasRemoved
       haveExtraPicture: $haveExtraPicture
       onGoing: $onGoing
+      timestamp: $timestamp,
+      timestamp (formatted): ${timestamp != null ? DateTime.fromMillisecondsSinceEpoch(timestamp!).toString() : 'N/A'}
       ''';
   }
 }

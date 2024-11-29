@@ -35,10 +35,13 @@ public class NotificationReceiver extends BroadcastReceiver {
         boolean canReply = intent.getBooleanExtra(CAN_REPLY, false);
         boolean isOngoing = intent.getBooleanExtra(IS_ONGOING, false);
         int id = intent.getIntExtra(ID, -1);
+        String key = intent.getStringExtra(NotificationConstants.KEY);
+        long timestamp = intent.getLongExtra(NotificationConstants.NOTIFICATION_TIMESTAMP, -1);
 
 
         HashMap<String, Object> data = new HashMap<>();
         data.put("id", id);
+        data.put("key", key);
         data.put("packageName", packageName);
         data.put("title", title);
         data.put("content", content);
@@ -49,6 +52,7 @@ public class NotificationReceiver extends BroadcastReceiver {
         data.put("hasRemoved", hasRemoved);
         data.put("canReply", canReply);
         data.put("onGoing", isOngoing);
+        data.put("timestamp", timestamp);
 
         eventSink.success(data);
     }

@@ -70,11 +70,15 @@ public class NotificationListener extends NotificationListenerService {
             largeIcon = getNotificationLargeIcon(getApplicationContext(), notification.getNotification());
         }
 
+//        long timestamp = notification.getPostTime();
+        long timestamp = notification.getNotification().when;
         Intent intent = new Intent(NotificationConstants.INTENT);
         intent.putExtra(NotificationConstants.PACKAGE_NAME, packageName);
         intent.putExtra(NotificationConstants.ID, notification.getId());
+        intent.putExtra(NotificationConstants.KEY, notification.getKey());
         intent.putExtra(NotificationConstants.CAN_REPLY, action != null);
         intent.putExtra(NotificationConstants.IS_ONGOING, isOngoing);
+        intent.putExtra(NotificationConstants.NOTIFICATION_TIMESTAMP, timestamp);
 
         if (NotificationUtils.getQuickReplyAction(notification.getNotification(), packageName) != null) {
             cachedNotifications.put(notification.getId(), action);
