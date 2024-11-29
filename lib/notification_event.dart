@@ -51,6 +51,10 @@ class ServiceNotificationEvent {
   /// the content of the notification
   String? content;
 
+  int? timestamp;
+
+  String? key;
+
   ServiceNotificationEvent({
     this.id,
     this.canReply,
@@ -62,6 +66,8 @@ class ServiceNotificationEvent {
     this.appIcon,
     this.largeIcon,
     this.content,
+    this.timestamp,
+    this.key,
   });
 
   ServiceNotificationEvent.fromMap(Map<dynamic, dynamic> map) {
@@ -75,6 +81,8 @@ class ServiceNotificationEvent {
     appIcon = map['appIcon'];
     largeIcon = map['largeIcon'];
     content = map['content'];
+    timestamp = map['timestamp']; // Retrieve the timestamp
+    key = map['key'];
   }
 
   /// send a direct message reply to the incoming notification
@@ -95,12 +103,15 @@ class ServiceNotificationEvent {
   String toString() {
     return '''ServiceNotificationEvent(
       id: $id
+      key: $key
       can reply: $canReply
       packageName: $packageName
       title: $title
       content: $content
       hasRemoved: $hasRemoved
       haveExtraPicture: $haveExtraPicture
+      timestamp: $timestamp,
+      timestamp (formatted): ${timestamp != null ? DateTime.fromMillisecondsSinceEpoch(timestamp!).toString() : 'N/A'}
       ''';
   }
 }
