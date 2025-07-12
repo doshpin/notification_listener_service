@@ -77,9 +77,13 @@ public class NotificationListener extends NotificationListenerService {
 
             if (extras.containsKey(Notification.EXTRA_PICTURE)) {
                 Bitmap bmp = (Bitmap) extras.get(Notification.EXTRA_PICTURE);
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                intent.putExtra(NotificationConstants.EXTRAS_PICTURE, stream.toByteArray());
+                if (bmp != null) {
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                    intent.putExtra(NotificationConstants.EXTRAS_PICTURE, stream.toByteArray());
+                } else {
+                    Log.w("NotificationListener", "Notification.EXTRA_PICTURE exists but is null.");
+                }
             }
         }
         sendBroadcast(intent);
