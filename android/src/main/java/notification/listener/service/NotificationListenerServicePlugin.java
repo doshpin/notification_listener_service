@@ -11,7 +11,7 @@ import android.content.IntentFilter;
 import android.os.Build;
 import android.provider.Settings;
 import android.util.Log;
-
+import android.content.ActivityNotFoundException;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
