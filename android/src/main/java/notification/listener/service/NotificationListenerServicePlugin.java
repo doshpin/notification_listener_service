@@ -11,7 +11,7 @@ import android.content.IntentFilter;
 import android.os.Build;
 import android.provider.Settings;
 import android.util.Log;
-
+import android.content.ActivityNotFoundException;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
@@ -62,7 +62,13 @@ public class NotificationListenerServicePlugin implements FlutterPlugin, Activit
             result.success(isPermissionGranted(context));
         } else if (call.method.equals("requestPermission")) {
             Intent intent = new Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS);
-            mActivity.startActivityForResult(intent, REQUEST_CODE_FOR_NOTIFICATIONS);
+            try {
+                mActivity.startActivityForResult(intent, REQUEST_CODE_FOR_NOTIFICATIONS);
+                result.success(null);
+            } catch (ActivityNotFoundException e) {
+                Log.e("NotificationPlugin", "ActivityNotFoundException: " + e.getMessage());
+                result.error("ACTIVITY_NOT_FOUND", "No activity found to handle notification listener settings", null);
+            }
         } else if (call.method.equals("sendReply")) {
             final String message = call.argument("message");
             final int notificationId = call.argument("notificationId");
