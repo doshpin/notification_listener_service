@@ -29,6 +29,8 @@ import notification.listener.service.models.ActionCache;
 import android.annotation.SuppressLint;
 import android.os.Build;
 
+import java.util.List;
+import java.util.Map;
 
 public class NotificationListenerServicePlugin implements FlutterPlugin, ActivityAware, MethodCallHandler, PluginRegistry.ActivityResultListener, EventChannel.StreamHandler {
 
@@ -76,7 +78,16 @@ public class NotificationListenerServicePlugin implements FlutterPlugin, Activit
                 result.success(false);
                 e.printStackTrace();
             }
-        } else {
+        } else if (call.method.equals("getActiveNotifications")) {
+            NotificationListener service = NotificationListener.getInstance();
+            if (service != null) {
+                List<Map<String, Object>> notifications = service.getActiveNotificationData();
+                result.success(notifications);
+            } else {
+                result.error("ServiceUnavailable", "NotificationService not running", null);
+            }
+        }
+        else {
             result.notImplemented();
         }
     }

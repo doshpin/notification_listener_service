@@ -18,6 +18,10 @@ import android.os.Bundle;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
+import java.util.List;
+import java.util.Map;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import androidx.annotation.RequiresApi;
 
@@ -29,6 +33,17 @@ import notification.listener.service.models.Action;
 @SuppressLint("OverrideAbstract")
 @RequiresApi(api = VERSION_CODES.JELLY_BEAN_MR2)
 public class NotificationListener extends NotificationListenerService {
+    private static NotificationListener instance;
+
+    public static NotificationListener getInstance() {
+        return instance;
+    }
+
+    @Override
+    public void onListenerConnected() {
+        super.onListenerConnected();
+        instance = this;
+    }
 
     @RequiresApi(api = VERSION_CODES.KITKAT)
     @Override
@@ -77,13 +92,9 @@ public class NotificationListener extends NotificationListenerService {
 
             if (extras.containsKey(Notification.EXTRA_PICTURE)) {
                 Bitmap bmp = (Bitmap) extras.get(Notification.EXTRA_PICTURE);
-                if (bmp != null) {
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                    intent.putExtra(NotificationConstants.EXTRAS_PICTURE, stream.toByteArray());
-                } else {
-                    Log.w("NotificationListener", "Notification.EXTRA_PICTURE exists but is null.");
-                }
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                intent.putExtra(NotificationConstants.EXTRAS_PICTURE, stream.toByteArray());
             }
         }
         sendBroadcast(intent);
@@ -121,6 +132,30 @@ public class NotificationListener extends NotificationListenerService {
             Log.d("ERROR LARGE ICON", "getNotificationLargeIcon: " + e.getMessage());
             return null;
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public List<Map<String, Object>> getActiveNotificationData() {
+        List<Map<String, Object>> notificationList = new ArrayList<>();
+        StatusBarNotification[] activeNotifications = getActiveNotifications();
+
+        for (StatusBarNotification sbn : activeNotifications) {
+            Map<String, Object> notifData = new HashMap<>();
+            Notification notification = sbn.getNotification();
+            Bundle extras = notification.extras;
+
+            notifData.put("id", sbn.getId());
+            notifData.put("packageName", sbn.getPackageName());
+            notifData.put("title", extras.getCharSequence(Notification.EXTRA_TITLE) != null
+                    ? extras.getCharSequence(Notification.EXTRA_TITLE).toString()
+                    : null);
+            notifData.put("content", extras.getCharSequence(Notification.EXTRA_TEXT) != null
+                    ? extras.getCharSequence(Notification.EXTRA_TEXT).toString()
+                    : null);
+
+            notificationList.add(notifData);
+        }
+        return notificationList;
     }
 
 }
