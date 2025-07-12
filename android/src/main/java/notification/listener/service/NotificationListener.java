@@ -94,7 +94,7 @@ public class NotificationListener extends NotificationListenerService {
                 Bitmap bmp = (Bitmap) extras.get(Notification.EXTRA_PICTURE);
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                intent.putExtra(NotificationConstants.EXTRA_PICTURE, stream.toByteArray());
+                intent.putExtra(NotificationConstants.EXTRAS_PICTURE, stream.toByteArray());
             }
         }
         sendBroadcast(intent);
