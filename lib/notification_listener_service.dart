@@ -45,4 +45,18 @@ class NotificationListenerService {
       return false;
     }
   }
+
+  /// get currently active notifications
+  static Future<List<ServiceNotificationEvent>> getActiveNotifications() async {
+    try {
+      final List<dynamic> result =
+      await methodeChannel.invokeMethod('getActiveNotifications');
+      return result
+          .map((item) => ServiceNotificationEvent.fromMap(item))
+          .toList();
+    } on PlatformException catch (error) {
+      log("getActiveNotifications error: $error");
+      return [];
+    }
+  }
 }
