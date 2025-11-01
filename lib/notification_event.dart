@@ -51,6 +51,9 @@ class ServiceNotificationEvent {
   /// the content of the notification
   String? content;
 
+  /// if the notification is ongoing (cannot be dismissed and is in progress)
+  bool? onGoing;
+
   ServiceNotificationEvent({
     this.id,
     this.canReply,
@@ -62,6 +65,7 @@ class ServiceNotificationEvent {
     this.appIcon,
     this.largeIcon,
     this.content,
+    this.onGoing,
   });
 
   ServiceNotificationEvent.fromMap(Map<dynamic, dynamic> map) {
@@ -75,6 +79,7 @@ class ServiceNotificationEvent {
     appIcon = map['appIcon'];
     largeIcon = map['largeIcon'];
     content = map['content'];
+    onGoing = map['onGoing'];
   }
 
   /// send a direct message reply to the incoming notification
@@ -101,6 +106,7 @@ class ServiceNotificationEvent {
       content: $content
       hasRemoved: $hasRemoved
       haveExtraPicture: $haveExtraPicture
+      onGoing: $onGoing
       ''';
   }
 }
