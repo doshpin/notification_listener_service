@@ -61,6 +61,7 @@ public class NotificationListener extends NotificationListenerService {
     private void handleNotification(StatusBarNotification notification, boolean isRemoved) {
         String packageName = notification.getPackageName();
         Bundle extras = notification.getNotification().extras;
+        boolean isOngoing = (notification.getNotification().flags & Notification.FLAG_ONGOING_EVENT) != 0;
         byte[] appIcon = getAppIcon(packageName);
         byte[] largeIcon = null;
         Action action = NotificationUtils.getQuickReplyAction(notification.getNotification(), packageName);
@@ -73,6 +74,7 @@ public class NotificationListener extends NotificationListenerService {
         intent.putExtra(NotificationConstants.PACKAGE_NAME, packageName);
         intent.putExtra(NotificationConstants.ID, notification.getId());
         intent.putExtra(NotificationConstants.CAN_REPLY, action != null);
+        intent.putExtra(NotificationConstants.IS_ONGOING, isOngoing);
 
         if (NotificationUtils.getQuickReplyAction(notification.getNotification(), packageName) != null) {
             cachedNotifications.put(notification.getId(), action);
@@ -156,6 +158,8 @@ public class NotificationListener extends NotificationListenerService {
             notifData.put("content", extras.getCharSequence(Notification.EXTRA_TEXT) != null
                     ? extras.getCharSequence(Notification.EXTRA_TEXT).toString()
                     : null);
+            boolean isOngoing = (notification.flags & Notification.FLAG_ONGOING_EVENT) != 0;
+            notifData.put("onGoing", isOngoing);
 
             notificationList.add(notifData);
         }

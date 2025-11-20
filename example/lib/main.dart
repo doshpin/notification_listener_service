@@ -119,6 +119,11 @@ class _MyAppState extends State<MyApp> {
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(height: 8.0),
+                          if (events[index].onGoing == true)
+                            const Text(
+                              "Ongoing notification",
+                              style: TextStyle(color: Colors.orange),
+                            ),
                           events[index].canReply!
                               ? const Text(
                                   "Replied with: This is an auto reply",
