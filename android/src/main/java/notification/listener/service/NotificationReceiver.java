@@ -27,17 +27,11 @@ public class NotificationReceiver extends BroadcastReceiver {
         String packageName = intent.getStringExtra(PACKAGE_NAME);
         String title = intent.getStringExtra(NOTIFICATION_TITLE);
         String content = intent.getStringExtra(NOTIFICATION_CONTENT);
-        byte[] notificationIcon = intent.getByteArrayExtra(NOTIFICATIONS_ICON);
-        byte[] notificationExtrasPicture = intent.getByteArrayExtra(EXTRAS_PICTURE);
-        byte[] largeIcon = intent.getByteArrayExtra(NOTIFICATIONS_LARGE_ICON);
-        boolean haveExtraPicture = intent.getBooleanExtra(HAVE_EXTRA_PICTURE, false);
         boolean hasRemoved = intent.getBooleanExtra(IS_REMOVED, false);
         boolean canReply = intent.getBooleanExtra(CAN_REPLY, false);
-        boolean isOngoing = intent.getBooleanExtra(IS_ONGOING, false);
         int id = intent.getIntExtra(ID, -1);
         String key = intent.getStringExtra(NotificationConstants.KEY);
         long timestamp = intent.getLongExtra(NotificationConstants.NOTIFICATION_TIMESTAMP, -1);
-
 
         HashMap<String, Object> data = new HashMap<>();
         data.put("id", id);
@@ -45,13 +39,8 @@ public class NotificationReceiver extends BroadcastReceiver {
         data.put("packageName", packageName);
         data.put("title", title);
         data.put("content", content);
-        data.put("notificationIcon", notificationIcon);
-        data.put("notificationExtrasPicture", notificationExtrasPicture);
-        data.put("haveExtraPicture", haveExtraPicture);
-        data.put("largeIcon", largeIcon);
         data.put("hasRemoved", hasRemoved);
         data.put("canReply", canReply);
-        data.put("onGoing", isOngoing);
         data.put("timestamp", timestamp);
 
         eventSink.success(data);
