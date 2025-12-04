@@ -173,11 +173,14 @@ public class NotificationListener extends NotificationListenerService {
         }
 
         void enqueue(NotificationData data) {
-            // Allow notifications with same or newer timestamp (for updates to existing notifications)
-            // Only skip if significantly older (more than 1 minute old compared to last processed)
-            if (data.timestamp < lastProcessedTimestamp - 60000) {
-                Log.d("NotificationQueue", "Skipping very old notification: " + data.timestamp + " vs " + lastProcessedTimestamp);
-                return;
+            // Always allow removed notifications (they use old timestamp)
+            if (!data.isRemoved) {
+                // Allow notifications with same or newer timestamp (for updates to existing notifications)
+                // Only skip if significantly older (more than 1 minute old compared to last processed)
+                if (data.timestamp < lastProcessedTimestamp - 60000) {
+                    Log.d("NotificationQueue", "Skipping very old notification: " + data.timestamp + " vs " + lastProcessedTimestamp);
+                    return;
+                }
             }
 
             // Drop oldest if queue is full
